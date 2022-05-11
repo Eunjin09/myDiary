@@ -5,8 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
          <script src="http://code.jquery.com/jquery-latest.js"></script>
-        <link rel="stylesheet" href="static/reset.css">
-        <link rel="stylesheet" href="static/style.css">
+        <link rel="stylesheet" href="../static/reset.css">
+        <link rel="stylesheet" href="../static/style.css">
         <title>Paint page</title>
     </head>
 
@@ -38,7 +38,7 @@
             <!-- 제목 -->
            <input type="text" name="title" id="title" placeholder="제목" method="" action="">
            <!--오늘 날짜 : 변수가져오기, 허용하는 가장 늦은날짜, 허용하는 가장 이른 날짜-->
-           <input type="date" id="day" name="trip-start" value="2018-11-10" min="2018-01-01" max="2018-12-31">
+           <input type="date" id="day" name="trip-start" ><!--value="2018-11-10" min="2018-01-01" max="2018-12-31"-->
            <!-- 내용 -->
            <textarea name="내용" id="texts" placeholder="내용" method="" action="" maxLength="25"></textarea>
            <!-- 날씨 -->
@@ -50,7 +50,7 @@
                <option value="⛅">⛅</option>
            </select>
            <!-- 저장 -->
-            <input type="button" id="submit" value="저장" name="제출버튼" onclick="posting()">
+            <input type="button" id="submit" class="submit-button" value="저장" name="제출버튼" ><!--onclick="onSubmit()"-->
 
            <!-- 취소: 메인으로 -->
            <input type="button" id="cancel" value="취소">
@@ -166,14 +166,10 @@
 
     </script>
     <script>
-       $(document).ready(function () {
+        $(document).ready(function () {
+            // commentListing()
+        })
 
-        });
-
-
-        // 일기 포스팅(등록) API ($태그를 가르키는 변수)
-        let $canvas = document.createElement('canvas');
-        let imgDataUrl = $canvas.toDataURL('image/jpeg'); //변환 완료
 
        // 오늘 날짜를 기본으로 표시, 7일전 일기까지 작성 가능
        let today = new Date()
@@ -184,19 +180,58 @@
        let date = today.getDate(); // 일
        // console.log(year + '-' + month + '-' + date);
 
-       // 날씨 등록
-       let weather_give = document.querySelector('#weather');
-
-       // 일기 내용
-       let texts_give = document.querySelector('#texts');
 
        // 일기 저장 클릭
        const submitBtn = document.querySelector('.submit-button');
 
        submitBtn.addEventListener('click', () => {
-           let day_give = document.getElementById('day').value;
-           console.log(day_give);   //성공!
+            // 그림판 저장
+            const canvas = document.querySelector('#jsCanvas');
+            let imgDataUrl = canvas.toDataURL('image/jpeg');
+
+           // 제목
+           let title_give = document.querySelector('#title').value;
+
+
+           // 선택한 날짜
+           let day_give = document.querySelector('#day').value;
+
+
+           // 일기 내용
+           let texts_give = document.querySelector('#texts').value;
+
+           //날씨
+           const weather_give = document.querySelector('#weather');
+           let weather = weather_give.options[weather_give.selectedIndex].value;
+           // console.log(weather)
+           // selectedIndex : 선택한 요소의 인덱스를 반영
+           //테스트
+           // console.log(imgDataUrl,title_give,day_give,texts_give,weather);
+
+
+           //데이터를 가져오는 기능과 서버로 요청하고 성공했다면 success 정보를 보여준다
+
+                // let comment = $("#textarea-post").val()
+                // let today = new Date().toISOString()
+                $.ajax({
+                    type: "POST",
+                    url: "/post",
+                    data: {
+                        'image': imgDataUrl,
+                        'nickname': '유저 닉네임',
+                        'title': title_give,
+                        'diary_date': day_give,
+                        'weather': weather,
+                        'texts': texts_give
+                    },
+                    success: function (response) {
+                         alert(response["msg"])
+                        window.location.reload()
+                    }
+                })
+
        })
+
 
 
 
