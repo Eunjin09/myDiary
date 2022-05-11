@@ -13,6 +13,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <script defer src="{{ url_for('static', filename='js/mainpage.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
 
 
 
@@ -155,12 +161,84 @@
         }
         .modal-wrap {
             display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:#fff;z-index:1000;
+
         }
 
 
     </style>
 
     <script>
+        {% if msg %}
+            alert("{{ msg }}")
+        {% endif %}
+        // ['쿠키'라는 개념에 대해 알아봅시다]
+        // 로그인을 구현하면, 반드시 쿠키라는 개념을 사용합니다.
+        // 페이지에 관계없이 브라우저에 임시로 저장되는 정보입니다. 키:밸류 형태(딕셔너리 형태)로 저장됩니다.
+        // 쿠키가 있기 때문에, 한번 로그인하면 네이버에서 다시 로그인할 필요가 없는 것입니다.
+        // 브라우저를 닫으면 자동 삭제되게 하거나, 일정 시간이 지나면 삭제되게 할 수 있습니다.
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {id_give: $('#userid').val(), pw_give: $('#userpw').val()},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+
+                        // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+                        // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+                        $.cookie('mytoken', response['token']);
+                        window.location.href = '/'
+
+                        alert('로그인 완료!')
+                        $("#section").css("display", "block");
+
+
+                    } else {
+                        // 로그인이 안되면 에러메시지를 띄웁니다.
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+        function check_dup() {
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/check_dup",
+                data: {
+
+                    id_give: $('#userid').val()
+                },
+                success: function (response) {
+
+                    if (response["exists"]) {
+                        alert('중복된 ID입니다.')
+
+                    } else {
+                        alert('사용 가능한 ID입니다.')
+                    }
+
+                }
+            });
+        }
+        function sign_up() {
+            $.ajax({
+                type: "POST",
+                url: "/api/sign_up",
+                data: {
+                    id_give: $('#userid').val(),
+                    pw_give: $('#userpw').val(),
+                    nickname_give: $('#usernickname').val()
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
 
         // 로그인 팝업창
 
@@ -244,9 +322,9 @@
         {% endif %}
 
         {% if loginCheck == true %}
-        <button type="button" hidden class="button is-primary">회원가입</button>
+            <button type="button" hidden class="button is-primary">회원가입</button>
         {% else %}
-        <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
+            <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
         {% endif %}
     </div>
 
@@ -254,7 +332,39 @@
     <!-- //modal 영역 -->
     <div class="modal-bg" onClick="javascript:popClose();"></div>
     <div class="modal-wrap">
-        modal sample
+        <div class="section has-text-centered">
+
+            <div class="container" style="width:300px">
+
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label" for="userid">ID</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                                       placeholder="My ID">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label" for="userpw">PW</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="password" class="input" id="userpw" placeholder="My Password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="button is-primary" onclick="login()">로그인</button>
+                <button class="button is-primary" onclick="popClose()">닫기</button>
+            </div>
+        </div>
     </div>
 
 
