@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script defer src="{{ url_for('static', filename='js/mainpage.js') }}"></script>
+
+
+
+
+    <title>나의 그림일기장</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hi+Melody&display=swap" rel="stylesheet">
+
+
+    <style>
+
+
+
+        .mytitle{
+
+
+            width: 100%;
+            height: 350px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWluaW9uc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60');
+            background-size: 100% 100%;
+
+            position: relative;
+
+
+        }
+
+        .title {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+
+            font-family: 'Hi Melody', cursive;
+            font-size: 50px;
+            color: whitesmoke;
+
+        }
+
+        .writebtn{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+
+            margin-top: 15px;
+        }
+
+
+        .login{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+
+        }
+
+
+        .back{
+            background-color: green;
+            background-image: url("https://media.istockphoto.com/photos/colorful-art-pastel-background-texture-picture-id700561108?k=20&m=700561108&s=612x612&w=0&h=LqG4cjUIvmfb2uEWq5FY7i4uih8DHIPD0iBKfXXEq-w=");
+            background-size: 70% 70%;
+            width: 100%;
+            height: 100%;
+
+
+        }
+        .back {
+            animation: abi 5s infinite;
+        }
+
+        @keyframes abi {
+            50% {background-position: bottom;}
+        }
+
+
+        .wrap{
+            background-color: transparent;
+            background-image:linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("https://media.istockphoto.com/photos/blank-greenboard-empty-space-with-chalk-traces-picture-id513822190?k=20&m=513822190&s=612x612&w=0&h=fM8jlpSgS5cZW-zUSXb5wP7-PdOIjycuormp1et1Emw=");
+            background-size: 100% 100%;
+
+            max-width: 80%;
+            height: 100%;
+
+
+
+
+            border-style: none solid;
+            border-color: tan;
+            border-radius: 4px;
+
+            margin: auto;
+            padding-top: 40px;
+
+
+
+        }
+
+
+
+        .row-cols-1{
+
+            margin-left: 40px;
+            margin-right: 40px;
+
+            border: 3px black ;
+        }
+
+
+
+        .card-img-top{
+            border-radius: 30px 10px 50px;
+        }
+
+        .morebtn{
+
+            position: fixed; bottom: 40px; left: 40%;
+            display: flex;
+        }
+        .btn1{
+            margin-left: 10px;
+        }
+
+
+        img{
+            max-width: 100%;
+            height: auto;
+        }
+
+        .modal-bg {
+            display:none;width:100%;height:100%;position:fixed;top:0;left:0;right:0;background: rgba(0, 0, 0, 0.6);z-index:999;
+        }
+        .modal-wrap {
+            display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:#fff;z-index:1000;
+        }
+
+
+    </style>
+
+    <script>
+    function popOpen() {
+
+    let modalPop = $('.modal-wrap');
+    let modalBg = $('.modal-bg');
+
+    $(modalPop).show();
+    $(modalBg).show();
+
+}
+
+ function popClose() {
+   let modalPop = $('.modal-wrap');
+   let modalBg = $('.modal-bg');
+
+   $(modalPop).hide();
+   $(modalBg).hide();
+
+}
+
+
+    </script>
+
+
+</head>
+<body>
+
+<div class = 'mytitle'>
+    <h1 class ='title'>나의 그림 일기장</h1>
+    <div class = 'writebtn'><button onclick="location.href='/post'" class = "button is-link">작성하기</button></div>
+</div>
+
+<div class = 'login'>
+    <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
+    <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
+</div>
+
+<div class="modal-bg" onClick="javascript:popClose();"></div>
+  <div class="modal-wrap">
+    modal sample
+        </div>
+        <!-- //modal 영역 -->
+
+
+<div class="back">
+    <div class="wrap">
+        <div id="cards-box" class="row row-cols-1 row-cols-md-3 g-3" >
+            <div class="col">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWpF_N9F2t7WBJRsbGzmxv55PIV6OdflFHg&usqp=CAU"
+                     class="card-img-top" alt="...">
+            </div>
+            <div class="col">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWpF_N9F2t7WBJRsbGzmxv55PIV6OdflFHg&usqp=CAU"
+                     class="card-img-top" alt="...">
+            </div>
+            <div class="col">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWpF_N9F2t7WBJRsbGzmxv55PIV6OdflFHg&usqp=CAU"
+                     class="card-img-top" alt="...">
+            </div>
+            <div class="col">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWpF_N9F2t7WBJRsbGzmxv55PIV6OdflFHg&usqp=CAU"
+                     class="card-img-top" alt="...">
+            </div>
+
+            {% for i in image_list %}
+            {% set image = i[image] %}
+<!--            {% set diary_num = i[diary_num] %}-->
+                <a href=""><div class="col"> <img src= {{image}} class="card-img-top" alt="..."> </div></a>
+            {% endfor %}
+
+
+
+        </div>
+        <div class = morebtn>
+            <div><button onclick="moreView()" type="button" class="btn btn-secondary btn-lg">더보기</button></div>
+            <div class = 'btn1'>
+                <div><button onclick="window.scrollTo(0,0);" type="button" class="btn btn-secondary btn-lg">처음으로</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
