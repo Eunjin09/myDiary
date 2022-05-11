@@ -20,7 +20,7 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+    <title>나의 그림일기장 : {{ diary_data.title }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -140,56 +140,57 @@
 
     <script>
         $(document).ready(function () {
-            commentListing()
         })
 
-
-        function commentListing() {
-            $.ajax({
-                type: "GET",
-                url: "/diary/comment?sample_give=샘플데이터",
-                data: {},
-                success: function (response) {
-                    let comments = response['all_comment']
-
-                    for (let i = 0; i < comments.length; i++) {
-                        let comment = comments[i]['comment']
-                        let name = comments[i]['name']
-                        let comment_date = comments[i]['comment_date']
-
-                        let temp_html = `<div class="card">
-                                            <div class="card-body">
-                                                <blockquote class="blockquote mb-0">
-                                                    <p>${comment}</p>
-                                                    <footer class="blockquote-footer"> ${name} <small>${comment_date}</small></footer>
-                                                </blockquote>
-                                            </div>
-                                        </div>`
-
-                        $('#comments-box').append(temp_html)
+        function postComment() {
+            let comment = $('#comment').val()
+            if (comment=='') {
+                alert('코멘트를 입력해주세요')
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/diary/comment",
+                    data: {
+                        comment_give: comment,
+                        all_comment_give : "{{ diary_data.comment }}",
+                        diary_num_give : "{{ page_num }}"
+                    },
+                    success: function (response) {
+                        alert(response['msg'])
+                        window.location.reload()
                     }
+                })
+            }
+        }
+
+        function diaryRecommend() {
+            $.ajax({
+                type: "POST",
+                url: "/diary/recommend",
+                data: {
+                    diary_num_give: "{{ page_num }}",
+                    recommend_count_give: "{{ diary_data.recommendCount }}"
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
                 }
             })
         }
 
-        function postComment() {
-           let comment = $('#comment').val()
-           if (comment=='') {
-               alert('코멘트를 입력해주세요')
-           } else {
-               $.ajax({
-                   type: "POST",
-                   url: "/diary/comment",
-                   data: {
-                       comment_give: comment,
-                       diary_num_give : {{ page_num }}
-                   },
-                   success: function (response) {
-                       alert(response['msg'])
-                       window.location.reload()
-                   }
-               })
-           }
+        function diaryReort() {
+            $.ajax({
+                type: "POST",
+                url: "/diary/report",
+                data: {
+                    diary_num_give: "{{ page_num }}",
+                    report_count_give: "{{ diary_data.reportCount }}"
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            })
         }
 
 
@@ -205,7 +206,11 @@
     <div class="diaryBox" id="diaryBox">
         <div class="diaryTop">
             <div class="dateShow">
-                 {{ diary_data.diary_date }}
+                 <p>
+                     {{ diary_data.diary_date.split("-")[0] }}년
+                     {{ diary_data.diary_date.split("-")[1].lstrip('0') }}월
+                     {{ diary_data.diary_date.split("-")[2].lstrip('0') }}일
+                 </p>
             </div>
             <div class="weatherShow">
               날씨:{{ diary_data.weather }}
@@ -226,9 +231,9 @@
     <div class="diaryFooter">
         <span id="diaryOwner">일기 주인 : {{ diary_data.name }} </span>
         <div class="diaryEval">
-            <button id="recommend"> 추천 ({{ diary_data.recommendCount }})</button>
+            <button onclick="diaryRecommend()" id="recommend"> 추천 ({{ diary_data.recommendCount }})</button>
             ｜
-            <button id="report"> 신고</button>
+            <button onclick="diaryReort()" id="report"> 신고</button>
         </div>
     </div>
 
@@ -241,6 +246,18 @@
     </div>
 
     <div class="commentList" id="comments-box">
+
+        {% for comment in diary_comment %}
+            <div class="card">
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{ comment.comment }}</p>
+                        <footer class="blockquote-footer"> {{ comment.name }} <small> {{ comment.comment_date }}</small>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
