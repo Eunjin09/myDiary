@@ -50,7 +50,7 @@
                <option value="⛅">⛅</option>
            </select>
            <!-- 저장 -->
-            <input type="button" id="submit" class="submit-button" value="저장" name="제출버튼" ><!--onclick="onSubmit()"-->
+            <input type="button" id="submit" class="submit-button check" value="저장" name="제출버튼" ><!--onclick="onSubmit()"-->
 
            <!-- 취소: 메인으로 -->
            <input type="button" id="cancel" value="취소">
@@ -180,11 +180,23 @@
        let date = today.getDate(); // 일
        // console.log(year + '-' + month + '-' + date);
 
-
        // 일기 저장 클릭
        const submitBtn = document.querySelector('.submit-button');
 
+       // input 빈값 체크
+       let inputCheck = document.getElementsByClassName("check");
+
+
        submitBtn.addEventListener('click', () => {
+
+           // let checkText = '';
+           // let $imput = document.getElementsByTagName(input)
+
+
+
+
+
+
             // 그림판 저장
             const canvas = document.querySelector('#jsCanvas');
             let imgDataUrl = canvas.toDataURL('image/jpeg');
@@ -206,7 +218,16 @@
            // console.log(weather)
            // selectedIndex : 선택한 요소의 인덱스를 반영
            //테스트
-           // console.log(imgDataUrl,title_give,day_give,texts_give,weather);
+           console.log(imgDataUrl,title_give,day_give,texts_give,weather);
+
+
+           function chickForm() {
+               if (imgDataUrl.trim() == "" || day_give.trim() == "" || texts_give.trim() == "" || title_give.trim() == "" ) {
+                alert("작성을 완료해주세요!");
+               return false;
+               }
+           }
+
 
 
            //데이터를 가져오는 기능과 서버로 요청하고 성공했다면 success 정보를 보여준다
