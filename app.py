@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 from pymongo import MongoClient
 
-client = MongoClient('mongodb+srv://na991223:seo30865@cluster0.2exnh.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://test:sparta@cluster1.f5u8i.mongodb.net/Cluster1?retryWrites=true&w=majority')
 db = client.na991223
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
@@ -21,10 +21,7 @@ import datetime
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 
-@app.route('/sign_up/check_dup', methods=['POST'])
-def check_dup():
-    # ID 중복확인
-    return jsonify({'result': 'success'})
+
 ##  HTML을 주는 부분             ##
 #################################
 @app.route('/')
@@ -33,7 +30,7 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"id": payload['id']})
-        return render_template('main.html', nickname=user_info["name"])
+        return render_template('test.html', nickname=user_info["name"])
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -49,6 +46,13 @@ def login():
 @app.route('/sign_up')
 def sign_up():
     return render_template('sign_up.html')
+
+@app.route('/sign_up/check_dup', methods=['POST'])
+def check_dup():
+    id_receive = request.form['id_give']
+    exists = bool(db.user.find_one({"id": id_receive}))
+    # print(value_receive, type_receive, exists)
+    return jsonify({'result': 'success', 'exists': exists})
 
 
 #################################
@@ -92,9 +96,11 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=100),
+
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
 
         # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
@@ -107,7 +113,7 @@ def api_login():
 # 로그인된 유저만 call 할 수 있는 API입니다.
 # 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
 # (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/name', methods=['GET'])
+@app.route('/api/login', methods=['GET'])
 def api_valid():
     token_receive = request.cookies.get('mytoken')
 
@@ -124,6 +130,8 @@ def api_valid():
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
         userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
         return jsonify({'result': 'success', 'name': userinfo['name']})
+
+
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
