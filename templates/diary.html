@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Gaegu', cursive;
+        }
+
+        .wrap {
+            width : 80%;
+            max-width: 700px;
+            margin: 50px auto;
+
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .toList {
+            font-size: 22px;
+            color: #3f3f3f;
+            padding: 5px 20px;
+            border: 1px solid gray;
+            border-radius: 25px;
+            background: none;
+        }
+
+        .toList:hover {
+            border: 2px solid #007bff;
+            font-size: 23px;
+            color: #007bff;
+        }
+
+        .diaryBox {
+            background-image: url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FBOwEB%2FbtrBHUo6yQP%2FKKIoD94DAhBHsiupNAWVBK%2Fimg.png");
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 0.25em;
+            border: 1px solid grey;
+        }
+
+        .diaryTop {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .dateShow {
+            border-right: 1px solid grey;
+            padding: 10px 10px 5px 20px;
+            width: 65%;
+        }
+
+        .titleShow {
+            border-top: 1px solid grey;
+            border-bottom: 1px solid grey;
+            padding: 10px 10px 5px 20px;
+        }
+
+        .weatherShow {
+            padding: 10px 10px 5px 10px;
+            width: 35%;
+        }
+
+        .diaryImage {
+            border-bottom: 1px solid grey;
+        }
+
+        .textBox {
+            font-size: 32px;
+            border: 1px solid grey;
+            margin: 10px;
+            padding: 0px 0px 0px 20px;
+            line-height: 64px;
+            letter-spacing: 0.5em;
+
+            background: repeating-linear-gradient(to bottom, transparent, transparent 64px, gray 64px, gray 65px);
+        }
+
+
+        .diaryFooter {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .diaryEval > button {
+            background: none;
+            border: none;
+            font-weight: bold;
+        }
+
+        #recommend:hover {
+            color: #007bff;
+            font-size: 23px;
+        }
+
+        #report:hover {
+            color: #ff0000;
+            font-size: 23px;
+        }
+
+        .commentPost {
+            margin: 30px 0px;
+        }
+
+
+
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            commentListing()
+        })
+
+
+        function commentListing() {
+            $.ajax({
+                type: "GET",
+                url: "/diary/comment?sample_give=샘플데이터",
+                data: {},
+                success: function (response) {
+                    let comments = response['all_comment']
+
+                    for (let i = 0; i < comments.length; i++) {
+                        let comment = comments[i]['comment']
+                        let name = comments[i]['name']
+                        let comment_date = comments[i]['comment_date']
+
+                        let temp_html = `<div class="card">
+                                            <div class="card-body">
+                                                <blockquote class="blockquote mb-0">
+                                                    <p>${comment}</p>
+                                                    <footer class="blockquote-footer"> ${name} <small>${comment_date}</small></footer>
+                                                </blockquote>
+                                            </div>
+                                        </div>`
+
+                        $('#comments-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function postComment() {
+           let comment = $('#comment').val()
+           if (comment=='') {
+               alert('코멘트를 입력해주세요')
+           } else {
+               $.ajax({
+                   type: "POST",
+                   url: "/diary/comment",
+                   data: {
+                       comment_give: comment,
+                       diary_num_give : {{ page_num }}
+                   },
+                   success: function (response) {
+                       alert(response['msg'])
+                       window.location.reload()
+                   }
+               })
+           }
+        }
+
+
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="header">
+        <button onclick="window.location.href='/main'" class="toList">리스트로</button>
+    </div>
+
+    <div class="diaryBox" id="diaryBox">
+        <div class="diaryTop">
+            <div class="dateShow">
+                 {{ diary_data.diary_date }}
+            </div>
+            <div class="weatherShow">
+              날씨:{{ diary_data.weather }}
+            </div>
+        </div>
+        <div class="titleShow">
+            제목: {{ diary_data.title }}
+        </div>
+
+        <div class="diaryImage">
+            <img src="{{ diary_data.image }}" alt="그림일기이미지" width="100%">
+        </div>
+        <div class="textBox">
+            {{ diary_data.texts }}
+        </div>
+    </div>
+
+    <div class="diaryFooter">
+        <span id="diaryOwner">일기 주인 : {{ diary_data.name }} </span>
+        <div class="diaryEval">
+            <button id="recommend"> 추천 ({{ diary_data.recommendCount }})</button>
+            ｜
+            <button id="report"> 신고</button>
+        </div>
+    </div>
+
+    <div class="commentPost">
+
+        <div class="input-group mb-3 input-group-lg">
+            <input type="text" id="comment" class="form-control" placeholder="코멘트를 남겨주세요" aria-describedby="button-addon2" style="height: 80px">
+            <button onclick="postComment()" class="btn btn-primary btn-lg" type="button" id="button-addon2">등록하기</button>
+        </div>
+    </div>
+
+    <div class="commentList" id="comments-box">
+    </div>
+</div>
+
+</body>
+
+</html>
