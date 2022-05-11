@@ -47,11 +47,14 @@ def login():
 def sign_up():
     return render_template('sign_up.html')
 
-@app.route('/sign_up/check_dup', methods=['POST'])
+@app.route('/sign_up/check_dup')
 def check_dup():
+    return render_template('sign_up.html')
+
+@app.route('/sign_up/check_dup', methods=['POST'])
+def api_check_dup():
     id_receive = request.form['id_give']
-    exists = bool(db.user.find_one({"id": id_receive}))
-    # print(value_receive, type_receive, exists)
+    exists = bool(db.user.find_one({'id': id_receive},{'_id': 0}))
     return jsonify({'result': 'success', 'exists': exists})
 
 
@@ -75,6 +78,7 @@ def api_sign_up():
     return jsonify({'result': 'success'})
 
 
+
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
@@ -96,7 +100,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=100),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*60*24),
 
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -113,7 +117,7 @@ def api_login():
 # 로그인된 유저만 call 할 수 있는 API입니다.
 # 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
 # (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/login', methods=['GET'])
+@app.route('/', methods=['POST'])
 def api_valid():
     token_receive = request.cookies.get('mytoken')
 
