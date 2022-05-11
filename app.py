@@ -9,7 +9,7 @@ import certifi
 
 SECRET_KEY = 'CLAW'
 
-#### MongoClient 각자 자기 코드 넣어서 테스트 하기!! ####
+####  MongoClient 각자 자기 코드 넣어서 테스트 하기!!  ####
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://test:sparta@cluster0.kdc5v.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta_pjt_mypicDiary_test
