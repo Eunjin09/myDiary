@@ -20,8 +20,10 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+    <title>나의 그림일기장 : {{ diary_data.title }}</title>
 
+
+    <!-- 구글 폰트 임포트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
@@ -45,6 +47,7 @@
         }
 
         .toList {
+        {# 리스트로 버튼 #}
             font-size: 22px;
             color: #3f3f3f;
             padding: 5px 20px;
@@ -60,6 +63,7 @@
         }
 
         .diaryBox {
+        {# 일기 내용 들어가는 곳 #}
             background-image: url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FBOwEB%2FbtrBHUo6yQP%2FKKIoD94DAhBHsiupNAWVBK%2Fimg.png");
             font-size: 30px;
             font-weight: bold;
@@ -68,6 +72,7 @@
         }
 
         .diaryTop {
+        {# 날짜-날씨 정렬용 #}
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -102,6 +107,7 @@
             line-height: 64px;
             letter-spacing: 0.5em;
 
+            {# 텍스트 아래 노트 모양 줄 만들기 #}
             background: repeating-linear-gradient(to bottom, transparent, transparent 64px, gray 64px, gray 65px);
         }
 
@@ -115,6 +121,7 @@
         }
 
         .diaryEval > button {
+        {# 추천, 신고버튼 #}
             background: none;
             border: none;
             font-weight: bold;
@@ -140,56 +147,62 @@
 
     <script>
         $(document).ready(function () {
-            commentListing()
         })
 
+        function postComment() {
+        {# 코멘트 입력하기 #}
+            let comment = $('#comment').val()
 
-        function commentListing() {
-            $.ajax({
-                type: "GET",
-                url: "/diary/comment?sample_give=샘플데이터",
-                data: {},
-                success: function (response) {
-                    let comments = response['all_comment']
-
-                    for (let i = 0; i < comments.length; i++) {
-                        let comment = comments[i]['comment']
-                        let name = comments[i]['name']
-                        let comment_date = comments[i]['comment_date']
-
-                        let temp_html = `<div class="card">
-                                            <div class="card-body">
-                                                <blockquote class="blockquote mb-0">
-                                                    <p>${comment}</p>
-                                                    <footer class="blockquote-footer"> ${name} <small>${comment_date}</small></footer>
-                                                </blockquote>
-                                            </div>
-                                        </div>`
-
-                        $('#comments-box').append(temp_html)
+            {# 입력된 값이 없으면 알럿창, 아니면 코멘트 DB에 저장 #}
+            if (comment == '') {
+                alert('코멘트를 입력해주세요')
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/diary/comment",
+                    data: {
+                        comment_give: comment,
+                        all_comment_give : "{{ diary_data.comment }}",
+                        diary_num_give : "{{ page_num }}"
+                    },
+                    success: function (response) {
+                        alert(response['msg'])
+                        window.location.reload()
                     }
+                })
+            }
+        }
+
+        function diaryRecommend() {
+        {# 일기장 추천하기 : 현재 페이지의 일기번호(diary_num)과 추천수를 보낸다 #}
+            $.ajax({
+                type: "POST",
+                url: "/diary/recommend",
+                data: {
+                    diary_num_give: "{{ page_num }}",
+                    recommend_count_give: "{{ diary_data.recommendCount }}"
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
                 }
             })
         }
 
-        function postComment() {
-           let comment = $('#comment').val()
-           if (comment=='') {
-               alert('코멘트를 입력해주세요')
-           } else {
-               $.ajax({
-                   type: "POST",
-                   url: "/diary/comment",
-                   data: {
-                       comment_give: comment,
-                       diary_num_give : {{ page_num }}
-                   },
-                   success: function (response) {
-                       alert(response['msg'])
-                       window.location.reload()
-                   }
-               })
-           }
+        function diaryReort() {
+        {# 일기장 신고하기 : 현재 페이지의 일기번호(diary_num)과 신고횟수를 보낸다#}
+            $.ajax({
+                type: "POST",
+                url: "/diary/report",
+                data: {
+                    diary_num_give: "{{ page_num }}",
+                    report_count_give: "{{ diary_data.reportCount }}"
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            })
         }
 
 
@@ -202,10 +215,16 @@
         <button onclick="window.location.href='/main'" class="toList">리스트로</button>
     </div>
 
+   {#  일기내용  #}
     <div class="diaryBox" id="diaryBox">
         <div class="diaryTop">
             <div class="dateShow">
-                 {{ diary_data.diary_date }}
+                 <p>
+                     {# 예뻐보이게 날짜 양식 변경! '-'를 기준으로 SPLIT #}
+                     {{ diary_data.diary_date.split("-")[0] }}년
+                     {{ diary_data.diary_date.split("-")[1].lstrip('0') }}월
+                     {{ diary_data.diary_date.split("-")[2].lstrip('0') }}일
+                 </p>
             </div>
             <div class="weatherShow">
               날씨:{{ diary_data.weather }}
@@ -223,15 +242,17 @@
         </div>
     </div>
 
+    {#  작성자, 추천, 신고 버튼  #}
     <div class="diaryFooter">
-        <span id="diaryOwner">일기 주인 : {{ diary_data.name }} </span>
+        <span id="diaryOwner">일기 주인 : {{ diary_data.nickname }} </span>
         <div class="diaryEval">
-            <button id="recommend"> 추천 ({{ diary_data.recommendCount }})</button>
+            <button onclick="diaryRecommend()" id="recommend"> 추천 ({{ diary_data.recommendCount }})</button>
             ｜
-            <button id="report"> 신고</button>
+            <button onclick="diaryReort()" id="report"> 신고</button>
         </div>
     </div>
 
+    {#  코멘트 작성하기  #}
     <div class="commentPost">
 
         <div class="input-group mb-3 input-group-lg">
@@ -240,7 +261,20 @@
         </div>
     </div>
 
+    {#  해당 일기의 코멘트 목록  #}
     <div class="commentList" id="comments-box">
+
+        {% for comment in diary_comment %}
+            <div class="card">
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{ comment.comment }}</p>
+                        <footer class="blockquote-footer"> {{ comment.name }} <small> {{ comment.comment_date }}</small>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
