@@ -30,7 +30,7 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"id": payload['id']})
-        return render_template('test.html', nickname=user_info["name"])
+        return render_template('mainpage.html', nickname=user_info["name"])
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -69,11 +69,11 @@ def api_check_dup():
 def api_sign_up():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
-    name_receive = request.form['name_give']
+    nickname_receive = request.form['nickname_give']
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
-    db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'name': name_receive})
+    db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nickname': nickname_receive})
 
     return jsonify({'result': 'success'})
 
@@ -133,7 +133,7 @@ def api_valid():
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
         userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success', 'name': userinfo['name']})
+        return jsonify({'result': 'success', 'nickname': userinfo['nickname']})
 
 
     except jwt.ExpiredSignatureError:
