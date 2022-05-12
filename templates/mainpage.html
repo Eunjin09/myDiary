@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +21,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 
+
+
+
     <title>나의 그림일기장</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,13 +34,14 @@
     <style>
 
 
-        .mytitle {
 
-            background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("/static/banner.jpg");
+        .mytitle{
+
+            background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("../static/banner.jpg");
             background-size: contain;
             background-position: center bottom;
 
-            background-repeat: no-repeat;
+            background-repeat: no-repeat ;
 
             width: 100%;
             height: 350px;
@@ -44,10 +49,11 @@
             position: relative;
 
             display: flex;
-            flex-direction: column;
+            flex-direction:column;
             justify-content: center;
 
         }
+
 
 
         .title {
@@ -65,7 +71,8 @@
         }
 
 
-        .login {
+
+        .login{
             position: absolute;
             top: 20px;
             right: 20px;
@@ -74,14 +81,12 @@
 
         .image_list {
             width: 85%;
-            margin: 50px auto;
-        {#background-color: rgba(148,148,148,0.46);#} display: flex;
+            margin: 50px auto ;
+            display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
-
             padding-top: 20px;
-
         }
 
         .diary_cards {
@@ -97,18 +102,15 @@
         }
 
 
-        .morebtn {
+        .morebtn{
 
 
-            position: fixed;
-            bottom: 40px;
-            right: 30px;
-            width: 120px;
+            position: fixed; bottom: 40px; right: 30px;
+            width:120px;
             display: flex;
 
         }
-
-        .btn1 {
+        .btn1{
             font-weight: bold;
             font-size: 20px;
             color: white;
@@ -121,33 +123,16 @@
         }
 
 
-        img {
+        img{
             max-width: 100%;
             height: auto;
         }
 
         .modal-bg {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 999;
+            display:none;width:100%;height:100%;position:fixed;top:0;left:0;right:0;background: rgba(0, 0, 0, 0.6);z-index:999;
         }
-
         .modal-wrap {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background: #fff;
-            z-index: 1000;
+            display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:#fff;z-index:1000;
 
         }
 
@@ -188,46 +173,7 @@
             })
         }
 
-        function check_dup() {
-            $.ajax({
-                type: "POST",
-                url: "/sign_up/check_dup",
-                data: {
 
-                    id_give: $('#userid').val()
-                },
-                success: function (response) {
-
-                    if (response["exists"]) {
-                        alert('중복된 ID입니다.')
-
-                    } else {
-                        alert('사용 가능한 ID입니다.')
-                    }
-
-                }
-            });
-        }
-
-        function sign_up() {
-            $.ajax({
-                type: "POST",
-                url: "/api/sign_up",
-                data: {
-                    id_give: $('#userid').val(),
-                    pw_give: $('#userpw').val(),
-                    nickname_give: $('#usernickname').val()
-                },
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        alert('회원가입이 완료되었습니다.')
-                        window.location.href = '/login'
-                    } else {
-                        alert(response['msg'])
-                    }
-                }
-            })
-        }
 
         // 로그인 팝업창
 
@@ -253,15 +199,17 @@
         $(document).ready(function () {
             // show_image();
         });
-        
 
 
-            // 로그아웃 클릭시 토큰값 잃게
-            function logout() {
-                $.removeCookie('mytoken');
-                alert('로그아웃!')
-                window.location.href = '/'
-            }
+
+
+        // 로그아웃 클릭시 토큰값 잃게
+        function logout(){
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href='/'
+        }
+
 
 
     </script>
@@ -271,21 +219,21 @@
 <body>
 
 <!--배너 및 작성하기버튼-->
-<div class='mytitle'>
-    <h1 type=button onclick="window.location.reload();" class='title'>나의 그림 일기장</h1>
+<div class = 'mytitle'>
+    <h1 type=button onclick="window.location.reload();" class ='title'>나의 그림 일기장</h1>
 </div>
 
 
 <!--작성하기, 로그인, 로그아웃 버튼-->
-<div class='login'>
+<div class = 'login'>
     {% if loginCheck == true %}
-        <button onclick="location.href='/post'" class="button is-link">작성하기</button>
+        <button onclick="location.href='/post'" class = "button is-link">작성하기</button>
     {% else %}
-        <button onclick="alert('로그인 필요!')" class="button is-link">작성하기</button>
+        <button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button>
     {% endif %}
 
     {% if loginCheck == true %}
-        <button onclick='logout();' class="button is-primary">로그아웃</button>
+        <button onclick= 'logout();' class="button is-primary">로그아웃</button>
     {% else %}
         <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
     {% endif %}
@@ -293,7 +241,7 @@
     {% if loginCheck == true %}
         <button type="button" hidden class="button is-primary">회원가입</button>
     {% else %}
-        <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
+        <button onclick="location.href='sign_up'" class="button is-primary">회원가입</button>
     {% endif %}
 
 
@@ -305,7 +253,7 @@
 <div class="modal-wrap">
     <div class="section has-text-centered">
 
-        <div class="container" style="width:300px">
+        <div class="container">
 
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
@@ -342,23 +290,22 @@
 <!--메인페이지 이미지카드 붙는곳-->
 
 
+
 <div class="back">
     <div class="wrap">
         <div class="image_list">
             {% for list in all_list %}
-                <div class="diary_cards"><a href=/diary/{{ list.diary_num }}><img class="image"
-                                                                                  src={{ list.image }} alt="..."></a>
+                <div class="diary_cards"><a href=/diary/{{ list.diary_num }}><img class="image" src={{ list.image }} alt="..."></a>
                 </div>
             {% endfor %}
         </div>
         <!--         더보기 및 페이지 상단으로 돌아가기 버튼, 더보기 버튼 구현 불가로 삭제!  -->
     </div>
 
-    <div class=morebtn>
-        <button class='btn1' onclick="window.scrollTo(0,0);" type="button">최상단</button>
-    </div>
+    <div class = morebtn>
+            <button class = 'btn1' onclick="window.scrollTo(0,0);" type="button" >최상단</button></div>
 
-</div>
+    </div>
 </div>
 
 </body>

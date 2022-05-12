@@ -10,8 +10,8 @@ SECRET_KEY = 'CLAW'
 
 #### MongoClient 각자 자기 코드 넣어서 테스트 하기!! ####
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://sparta:test@cluster0.gqkk6.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
-db = client.dbdiary
+client = MongoClient('mongodb+srv://test:sparta@cluster0.kdc5v.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
+db = client.dbsparta_pjt_mypicDiary_test
 
 
 def loginCheck():
@@ -55,15 +55,14 @@ def check_dup():
 @app.route('/diary/<page_num>')
 def diary_view(page_num):
     # 주소 /diary/뒤의 숫자를 page_num으로 받아와서 DB의 diary에서 diary_num이 page_num과 일치하는 일기를 가져온다
-    diary_data = db.diary.find_one({'diary_num':int(page_num)})
+    diary_data = db.diary.find_one({'diary_num': int(page_num)})
 
     # DB의 comment에서 diary_num이 page_num과 일치하는 코멘트들을 모두 가져온다.
-    diary_comment = list(db.comment.find({'diary_num':int(page_num)}))
+    diary_comment = list(db.comment.find({'diary_num': int(page_num)}))
 
-    return render_template('diary.html', page_num = page_num, diary_data = diary_data, diary_comment = diary_comment)
+    return render_template('diary.html', page_num=page_num, diary_data=diary_data, diary_comment=diary_comment)
 
 
-#### 여기부터 기능 API ####
 
 
 ## 일기 작성 API
@@ -103,8 +102,6 @@ def post():
         }
 
         db.diary.insert_one(doc)
-
-        # return render_template("post.html", msg=myname)({'msg': '코멘트 등록 완료!'})
         return jsonify({'result': 'success', 'msg': '일기 저장 완료!'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
@@ -119,15 +116,14 @@ def save_comment():
     # 새로운 코멘트에 부여할 코멘트번호(comment_num)를 만든다
     comment_count = list(db.comment.find({}, {'_id': False}))
     comment_num = len(comment_count) + 1
-    writtenTime = datetime.now()
 
     # 코멘트에 저장되는 정보 : 일기번호, 코멘트번호, 코멘트내용, 작성자닉네임, 작성날짜
     newComment = {
-        'diary_num' : int(diary_num_receive),
-        'comment_num':comment_num,
-        'comment': comment_receive,
-        'nickname' : '임시이름',
-        'comment_date' : writtenTime.strftime('%Y-%m-%d  %H:%M')
+      'diary_num': int(diary_num_receive),
+      'comment_num': comment_num,
+      'comment': comment_receive,
+      'nickname': '임시이름',
+      'comment_date': "2022-05-12"
     }
 
     db.comment.insert_one(newComment)
@@ -187,6 +183,13 @@ def api_sign_up():
 
     return jsonify({'result': 'success'})
 
+@app.route('/sign_up/check_dup', methods=['POST'])
+def api_check_dup():
+    id_receive = request.form['id_give']
+    exists = bool(db.user.find_one({'id': id_receive},{'_id': 0}))
+    return jsonify({'result': 'success', 'exists': exists})
+
+
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
@@ -211,7 +214,7 @@ def api_login():
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24),
 
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
         # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
