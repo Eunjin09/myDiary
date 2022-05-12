@@ -50,9 +50,8 @@
 
         .title {
             position: absolute;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%,-50%);
+            top: 20px;
+            left: 30px;
 
             font-family: 'Hi Melody', cursive;
             font-size: 50px;
@@ -60,14 +59,13 @@
 
         }
 
-        .writebtn{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-
-            margin-top: 15px;
-        }
+        {#.writebtn{#}
+        {#    position: absolute;#}
+        {#    top: 20px;#}
+        {#    right: 40px;#}
+        {##}
+        {#    margin-top: 15px;#}
+        {#}#}
 
 
         .login{
@@ -139,10 +137,8 @@
         .morebtn{
 
 
-            position: fixed; bottom: 40px;
-            width:50%;
-            margin-left:30%;
-            margin-right:30%;
+            position: fixed; bottom: 40px; right: 30px;
+            width:120px;
             display: flex;
 
         }
@@ -304,21 +300,22 @@
 
     <!--배너 및 작성하기버튼-->
     <div class = 'mytitle'>
-        <h1 class ='title'>나의 그림 일기장</h1>
-        {% if loginCheck == true %}
-        <div class = 'writebtn'><button onclick="location.href='/post'" class = "button is-link">작성하기</button></div>
-        {% else %}
-        <div class = 'writebtn'><button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button></div>
-        {% endif %}
+        <h1 type=button onclick="window.location.reload();" class ='title'>나의 그림 일기장</h1>
     </div>
 
 
-    <!--로그인 로그아웃 시 버튼표시-->
+    <!--작성하기, 로그인, 로그아웃 버튼-->
     <div class = 'login'>
         {% if loginCheck == true %}
-        <button onclick= 'logout();' class="button is-primary">로그아웃</button>
+            <button onclick="location.href='/post'" class = "button is-link">작성하기</button>
         {% else %}
-        <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
+            <button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button>
+        {% endif %}
+
+        {% if loginCheck == true %}
+            <button onclick= 'logout();' class="button is-primary">로그아웃</button>
+        {% else %}
+            <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
         {% endif %}
 
         {% if loginCheck == true %}
@@ -326,6 +323,8 @@
         {% else %}
             <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
         {% endif %}
+
+
     </div>
 
 
@@ -374,17 +373,17 @@
             <div id="cards-box" class="row row-cols-1 row-cols-md-3 g-3" >
 
                 {% for list in all_list %}
-                <a href=/diary/{{list.diary_num}}><div class="col"> <img src= {{list.image}} class="card-img-top" alt="..."> </div></a>
+                    <a href=/diary/{{list.diary_num}}><div class="col"> <img src= {{list.image}} class="card-img-top" alt="..."> </div></a>
                 {% endfor %}
-
-
-                <!--         더보기 및 페이지 상단으로 돌아가기 버튼 상황상 더보기 버튼 구현 불가할 것 같음  -->
             </div>
-            <div class = morebtn>
-                <div><button onclick="moreView()" type="button" class="btn btn-secondary btn-lg">더보기</button></div>
-                <div class = 'btn1'>
-                    <div><button onclick="window.scrollTo(0,0);" type="button" class="btn btn-secondary btn-lg">처음으로</button></div>
-                </div>
+
+            <!--         더보기 및 페이지 상단으로 돌아가기 버튼, 더보기 버튼 구현 불가로 삭제!  -->
+
+
+        </div>
+        <div class = morebtn>
+            <div class = 'btn1'>
+                <div><button onclick="window.scrollTo(0,0);" type="button" class="btn btn-secondary btn-lg">최상단</button></div>
             </div>
         </div>
     </div>
