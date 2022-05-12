@@ -51,7 +51,7 @@ def diary_view(page_num):
 
 
 ## 일기 작성 API
-@app.route('/post/newdiary', methods=['POST'])
+@app.route('/post', methods=['POST'])
 def post():
     # token_receive = request.cookies.get('mytoken')
     try:
