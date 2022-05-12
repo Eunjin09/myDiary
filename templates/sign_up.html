@@ -1,132 +1,123 @@
 <!doctype html>
 <html lang="en">
-    <head>
+<head>
 
-        <!-- Webpage Title -->
-        <title></title>
+    <!-- Webpage Title -->
+    <title></title>
 
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bulma CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <!-- JS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-        <script>
-            // 간단한 회원가입 함수입니다.
-            // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
-            function sign_up() {
-                $.ajax({
-                    type: "POST",
-                    url: "/api/sign_up",
-                    data: {
-                        id_give: $('#userid').val(),
-                        pw_give: $('#userpw').val(),
-                        name_give: $('#username').val()
-                    },
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            alert('회원가입이 완료되었습니다.')
-                            window.location.href = '/login'
-                        } else {
-                            alert(response['msg'])
-                        }
+    <script>
+        // 간단한 회원가입 함수입니다.
+        // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
+        //완료되면 로그인 페이지로 넘어갑니다.
+        function sign_up() {
+            $.ajax({
+                type: "POST",
+                url: "/api/sign_up",
+                data: {
+                    id_give: $('#userid').val(),
+                    pw_give: $('#userpw').val(),
+                    nickname_give: $('#usernickname').val()
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
+                    } else {
+                        alert(response['msg'])
                     }
-                })
-            }
-
-            function check_dup() {
-                let id = $("#input-id").val()
-                console.log(id)
-                if (id == "") {
-                    $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-                    $("#input-id").focus()
-                    return;
                 }
-                if (!is_id) {
-                    $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
-                    $("#input-id").focus()
-                    return;
-                }
-                $("#help-id").addClass("is-loading")
-                $.ajax({
-                    type: "POST",
-                    url: "/sign_up/check_dup",
-                    data: {
-                        username_give: username
-                    },
-                    success: function (response) {
+            })
+        }
+        // 아이디 중복확인 함수입니다.
+        //토큰을 디코딩하여 id를 찾아서 존재하면 exists를 날립니다.
+        function check_dup() {
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/check_dup",
+                data: {
 
-                        if (response["exists"]) {
-                            $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
-                            $("#input-id").focus()
-                        } else {
-                            $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
-                        }
-                        $("#help-id").removeClass("is-loading")
+                    id_give: $('#userid').val()
+                },
+                success: function (response) {
 
+                    if (response["exists"]) {
+                        alert('중복된 ID입니다.')
+
+                    } else {
+                        alert('사용 가능한 ID입니다.')
                     }
-                });
-            }
-            function popClose() {
-                       var modalPop = $('.modal-wrap');
-                       var modalBg = $('.modal-bg');
 
-                       $(modalPop).hide();
-                       $(modalBg).hide();
-            }
+                }
+            });
+        }
+        //팝업창 닫는 함수입니다.
 
-        </script>
-    </head>
-    <body>
-        <div class="section has-text-centered" >
-            <h1 class="title">회원가입 페이지</h1>
-            <div class="container" style="width:300px">
-                <div class="field is-horizontal">
+        function popClose() {
+            var modalPop = $('.modal-wrap');
+            var modalBg = $('.modal-bg');
 
-                    <div class="field-label is-normal">
-                        <label class="label" for="userid">ID</label>
-                    </div>
-                    <div class="field-body" >
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
-                                       placeholder="My ID">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-dark" onclick="check_dup()">아이디 중복검사</button>
-                </div>
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userpw">PW</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="password" class="input" id="userpw" placeholder="My Password">
-                            </div>
-                        </div>
+            $(modalPop).hide();
+            $(modalBg).hide();
+        }
+
+    </script>
+</head>
+<body>
+<div class="section has-text-centered">
+    <h1 class="title">회원가입 페이지</h1>
+    <div class="container" style="width:300px">
+        <div class="field is-horizontal">
+
+            <div class="field-label is-normal">
+                <label class="label" for="userid">ID</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                               placeholder="My ID">
                     </div>
                 </div>
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="username">NICKNAME</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="username" placeholder="My Nickname">
-                            </div>
-                        </div>
+            </div>
+            <button type="button" class="btn btn-dark" style="width:80px" onclick="check_dup()">중복검사</button>
+        </div>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="userpw">PW</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input type="password" class="input" id="userpw" placeholder="My Password">
                     </div>
                 </div>
-                <button class="button is-primary" onclick="sign_up()">회원가입</button>
-                <button class="button is-primary" onclick="popClose()">닫기</button>
             </div>
         </div>
-    </body>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="usernickname">NICKNAME</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input type="text" class="input" id="usernickname" placeholder="My Nickname">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="button is-primary" onclick="sign_up()">회원가입</button>
+        <button class="button is-primary" onclick="popClose()">닫기</button>
+    </div>
+</div>
+</body>
 </html>
