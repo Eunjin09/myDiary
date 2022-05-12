@@ -1,7 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!--    제이쿼리 플라스크-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script defer src="{{ url_for('static', filename='js/mainpage.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
     <!--벌마, 부트스트랩-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -9,10 +17,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <!--    제이쿼리 플라스크-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-    <script defer src="{{ url_for('static', filename='js/mainpage.js') }}"></script>
 
 
 
@@ -30,38 +37,39 @@
 
         .mytitle{
 
+            background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("../static/banner.jpg");
+            background-size: contain;
+            background-position: center bottom;
+
+            background-repeat: no-repeat ;
 
             width: 100%;
             height: 350px;
 
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWluaW9uc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60');
-            background-size: 100% 100%;
-
             position: relative;
 
+            display: flex;
+            flex-direction:column;
+            justify-content: center;
 
         }
+
+
 
         .title {
-            position: absolute;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%,-50%);
+            margin: 50px auto 0px auto;
+            top: 20px;
+            left: 30px;
 
             font-family: 'Hi Melody', cursive;
-            font-size: 50px;
-            color: whitesmoke;
+            font-weight: bold;
+            font-size: 80px;
+
+            color: black;
+
 
         }
 
-        .writebtn{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-
-            margin-top: 15px;
-        }
 
 
         .login{
@@ -71,77 +79,47 @@
 
         }
 
-
-        .back{
-            background-color: green;
-            background-image: url("https://media.istockphoto.com/photos/colorful-art-pastel-background-texture-picture-id700561108?k=20&m=700561108&s=612x612&w=0&h=LqG4cjUIvmfb2uEWq5FY7i4uih8DHIPD0iBKfXXEq-w=");
-            background-size: 70% 70%;
-            width: 100%;
-            min-height: 100vh;
-
-            position: relative;
-
-
-        }
-        .back {
-            animation: abi 5s infinite;
+        .image_list {
+            width: 85%;
+            margin: 50px auto ;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding-top: 20px;
         }
 
-        @keyframes abi {
-            50% {background-position: bottom;}
+        .diary_cards {
+            width: 30%;
+            min-width: 300px;
+            margin: 1.6em;
+            background-color: white;
+
+            box-shadow: 3px 3px 3px 0px grey;
+            border: 1px solid gray;
+            border-radius: 10px;
+            padding: 10px;
         }
 
-
-        .wrap{
-            background-color: transparent;
-            background-image:linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("https://media.istockphoto.com/photos/blank-greenboard-empty-space-with-chalk-traces-picture-id513822190?k=20&m=513822190&s=612x612&w=0&h=fM8jlpSgS5cZW-zUSXb5wP7-PdOIjycuormp1et1Emw=");
-            background-size: 100% 100%;
-
-            max-width: 80%;
-            min-height: 100vh;
-
-
-
-
-            border-style: none solid;
-            border-color: tan;
-            border-radius: 4px;
-
-            margin: auto;
-            padding-top: 40px;
-
-
-
-        }
-
-
-
-        .row-cols-1{
-
-            margin-left: 40px;
-            margin-right: 40px;
-
-            border: 3px black ;
-        }
-
-
-
-        .card-img-top{
-            border-radius: 30px 10px 50px;
-        }
 
         .morebtn{
 
 
-            position: fixed; bottom: 40px;
-            width:50%;
-            margin-left:30%;
-            margin-right:30%;
+            position: fixed; bottom: 40px; right: 30px;
+            width:120px;
             display: flex;
 
         }
         .btn1{
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+
+            background-color: rgba(77, 138, 236, 0.88);
             margin-left: 10px;
+            padding: 20px;
+            border: none;
+            border-radius: 100px;
         }
 
 
@@ -155,12 +133,47 @@
         }
         .modal-wrap {
             display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:#fff;z-index:1000;
+
         }
 
 
     </style>
 
     <script>
+        {% if msg %}
+            alert("{{ msg }}")
+        {% endif %}
+        // ['쿠키'라는 개념에 대해 알아봅시다]
+        // 로그인을 구현하면, 반드시 쿠키라는 개념을 사용합니다.
+        // 페이지에 관계없이 브라우저에 임시로 저장되는 정보입니다. 키:밸류 형태(딕셔너리 형태)로 저장됩니다.
+        // 쿠키가 있기 때문에, 한번 로그인하면 네이버에서 다시 로그인할 필요가 없는 것입니다.
+        // 브라우저를 닫으면 자동 삭제되게 하거나, 일정 시간이 지나면 삭제되게 할 수 있습니다.
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {id_give: $('#userid').val(), pw_give: $('#userpw').val()},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+
+                        // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+                        // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+                        $.cookie('mytoken', response['token']);
+                        window.location.href = '/'
+
+                        alert('로그인 완료!')
+                        $("#section").css("display", "block");
+
+
+                    } else {
+                        // 로그인이 안되면 에러메시지를 띄웁니다.
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+
+
 
         // 로그인 팝업창
 
@@ -186,34 +199,15 @@
         $(document).ready(function () {
             // show_image();
         });
-        function show_image() {
-            $.ajax({
-                type: 'GET',
-                url: '/diary',
-                data: {},
-                success: function (response) {
-                    let rows = response['img']
-                    for (let i = 0; i < rows.length; i++) {
-                        let image = rows[i]['image']
-
-                        let temp_html=` <div class="col">
-                                            <img src=${image}
-                                                 class="card-img-top" alt="...">
-                                        </div>`
-
-                        $('#cards-box').append(temp_html)
 
 
-                    }
-                }
-            });
-        }
+
 
         // 로그아웃 클릭시 토큰값 잃게
         function logout(){
             $.removeCookie('mytoken');
             alert('로그아웃!')
-            window.location.href='/login'
+            window.location.href='/'
         }
 
 
@@ -224,60 +218,95 @@
 </head>
 <body>
 
-    <!--배너 및 작성하기버튼-->
-    <div class = 'mytitle'>
-        <h1 class ='title'>나의 그림 일기장</h1>
-        {% if loginCheck == true %}
-        <div class = 'writebtn'><button onclick="location.href='/write'" class = "button is-link">작성하기</button></div>
-        {% else %}
-        <div class = 'writebtn'><button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button></div>
-        {% endif %}
-    </div>
+<!--배너 및 작성하기버튼-->
+<div class = 'mytitle'>
+    <h1 type=button onclick="window.location.reload();" class ='title'>나의 그림 일기장</h1>
+</div>
 
 
-    <!--로그인 로그아웃 시 버튼표시-->
-    <div class = 'login'>
-        {% if loginCheck == true %}
+<!--작성하기, 로그인, 로그아웃 버튼-->
+<div class = 'login'>
+    {% if loginCheck == true %}
+        <button onclick="location.href='/post'" class = "button is-link">작성하기</button>
+    {% else %}
+        <button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button>
+    {% endif %}
+
+    {% if loginCheck == true %}
         <button onclick= 'logout();' class="button is-primary">로그아웃</button>
-        {% else %}
+    {% else %}
         <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
-        {% endif %}
+    {% endif %}
 
-        {% if loginCheck == true %}
+    {% if loginCheck == true %}
         <button type="button" hidden class="button is-primary">회원가입</button>
-        {% else %}
-        <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
-        {% endif %}
-    </div>
+    {% else %}
+        <button onclick="location.href='sign_up'" class="button is-primary">회원가입</button>
+    {% endif %}
 
 
-    <!-- //modal 영역 -->
-    <div class="modal-bg" onClick="javascript:popClose();"></div>
-    <div class="modal-wrap">
-        modal sample
-    </div>
+</div>
 
 
-    <!--메인페이지 이미지카드 붙는곳-->
-    <div class="back">
-        <div class="wrap">
-            <div id="cards-box" class="row row-cols-1 row-cols-md-3 g-3" >
+<!-- //modal 영역 -->
+<div class="modal-bg" onClick="javascript:popClose();"></div>
+<div class="modal-wrap">
+    <div class="section has-text-centered">
 
-                {% for list in all_list %}
-                <a href=/diary/{{list.diary_num}}><div class="col"> <img src= {{list.image}} class="card-img-top" alt="..."> </div></a>
-                {% endfor %}
+        <div class="container">
 
-
-                <!--         더보기 및 페이지 상단으로 돌아가기 버튼 상황상 더보기 버튼 구현 불가할 것 같음  -->
-            </div>
-            <div class = morebtn>
-                <div><button onclick="moreView()" type="button" class="btn btn-secondary btn-lg">더보기</button></div>
-                <div class = 'btn1'>
-                    <div><button onclick="window.scrollTo(0,0);" type="button" class="btn btn-secondary btn-lg">처음으로</button></div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label" for="userid">ID</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                                   placeholder="My ID">
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label" for="userpw">PW</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input type="password" class="input" id="userpw" placeholder="My Password">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="button is-primary" onclick="login()">로그인</button>
+            <button class="button is-primary" onclick="popClose()">닫기</button>
         </div>
     </div>
+</div>
+
+
+<!--메인페이지 이미지카드 붙는곳-->
+
+
+
+<div class="back">
+    <div class="wrap">
+        <div class="image_list">
+            {% for list in all_list %}
+                <div class="diary_cards"><a href=/diary/{{ list.diary_num }}><img class="image" src={{ list.image }} alt="..."></a>
+                </div>
+            {% endfor %}
+        </div>
+        <!--         더보기 및 페이지 상단으로 돌아가기 버튼, 더보기 버튼 구현 불가로 삭제!  -->
+    </div>
+
+    <div class = morebtn>
+            <button class = 'btn1' onclick="window.scrollTo(0,0);" type="button" >최상단</button></div>
+
+    </div>
+</div>
 
 </body>
 </html>

@@ -6,6 +6,25 @@ body {
     align-items: center;
     padding: 50px 0px;
 }
+#wrap {}
+.floatL {
+    float: left;
+    padding: 20px 0;
+}
+.floatR{
+    float: right;
+    width: 45%;
+    height:600px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 0 3rem;
+}
+.floatR > div {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 /*** 그림판 ***/
 .canvas {
     width: 600px;
@@ -16,14 +35,14 @@ body {
 }
 
 .controls {
-    margin: 40px 0;
+    margin: 20px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .controls .controls_btns {
-    margin-bottom: 30px;
+    margin-bottom: 16px;
 }
 
 .controls_btns button {
@@ -59,31 +78,37 @@ body {
 }
 
 .controls .controls_range {
-    margin-bottom: 30px;
+    margin-bottom: 16px;
 }
 
 /*** 폼 ***/
 form {
-    margin-top: 40px;
-    overflow: hidden;
+    width: 1200px;
 }
 
 #title {
     width: 65%;
-    height: 30px;
+    height: 40px;
     float: left;
+    border: none;
+    border-bottom: 1px solid #888888;
+    font-size: 16px;
+    line-height: 40px;
 }
 
 #day {
     width: 30%;
-    height: 30px;
+    height: 40px;
     float: right;
+    padding-left: 10px;
 }
 
 #texts {
     width: 100%;
-    height: 100px;
+    height: 200px;
     margin: 15px 0;
+    padding: 10px;
+    font-size: 18px;
 }
 
 #weather {
@@ -92,14 +117,14 @@ form {
 }
 
 #submit {
-    width: 10%;
+    width: 18%;
     height: 30px;
     float: right;
     margin-left: 8px;
 }
 
 #cancel{
-    width: 10%;
+    width: 18%;
     height: 30px;
     float: right;
 }

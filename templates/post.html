@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="../static/reset.css">
         <link rel="stylesheet" href="../static/style.css">
         <title>Paint page</title>
@@ -15,8 +15,9 @@
        <!---- 그림판 ---->
        <!--- 일기 내용 영역 --->
        <form name="form" id="form" ><!--action="/diary" method="POST" onsubmit="checkForm()";-->
-           <canvas id="jsCanvas" class="canvas"></canvas>
-           <div class="controls">
+           <div class="floatL">
+               <canvas id="jsCanvas" class="canvas"></canvas>
+               <div class="controls">
                <div class="controls_range">
                    <input type="range" id="jsRange" min="0.1" max="5.0" value="2.5" step="0.1"/>
                </div>
@@ -35,27 +36,32 @@
                    <div class="controls_color jsColor" style="background-color: #5856d6;"></div>
                </div>
            </div>
-            <!-- 제목 -->
-           <input type="text" name="title" id="title" placeholder="제목" method="" action="">
-           <!--오늘 날짜 : 변수가져오기, 허용하는 가장 늦은날짜, 허용하는 가장 이른 날짜-->
-           <input type="date" id="day" name="trip-start" ><!--value="2018-11-10" min="2018-01-01" max="2018-12-31"-->
-           <!-- 내용 -->
-           <textarea name="내용" id="texts" placeholder="내용" method="" action="" maxLength="25"></textarea>
-           <!-- 날씨 -->
-           <select name="날씨" id="weather">
-               <option value="🌞">🌞</option>
-               <option value="☁">☁</option>
-               <option value="🌨">🌨</option>
-               <option value="🌩">🌩</option>
-               <option value="⛅">⛅</option>
-           </select>
-           <!-- 저장 -->
-            <input type="button" id="submit" class="submit-button" value="저장" name="제출버튼" ><!--onclick="onSubmit()"-->
+           </div>
 
-           <!-- 취소: 메인으로 -->
-           <input type="button" id="cancel" value="취소">
+            <!-- 제목 -->
+           <div class="floatR">
+               <div>
+                   <!-- 제목 -->
+                   <input type="text" name="title" id="title" placeholder="제목 (최대 17글자)" maxLength="17">
+                   <!--오늘 날짜 : 변수가져오기, 허용하는 가장 늦은날짜, 허용하는 가장 이른 날짜-->
+                   <input type="date" id="day" name="trip-start">
+                   <!--value="2018-11-10" min="2018-01-01" max="2018-12-31"-->
+                   <!-- 내용 -->
+                   <textarea name="내용" id="texts" placeholder="최대 70글자까지 작성 가능합니다" maxLength="70"></textarea>
+                   <!-- 날씨 -->
+                   <select name="날씨" id="weather">
+                       <option value="🌞">맑음 🌞</option>
+                       <option value="☁">구름 ☁</option>
+                       <option value="🌨">비🌨</option>
+                       <option value="🌩">번개🌩</option>
+                       <option value="⛅">흐림⛅</option>
+                   </select>
+                   <!-- 저장 -->
+                   <input type="button" id="submit" class="submit-button" value="저장" name="제출버튼">
+                   <input type="button" id="cancel" value="작성 취소">
+               </div>
+           </div>
        </form>
-<!--       <button class="submit-button" onclick="onSubmit()">저장</button>-->
    </div>
 
     <script>
@@ -138,7 +144,6 @@
 
         function handleSaveClick() {
             const image = canvas.toDataURL();
-            alert(image)
             const link = document.createElement("a");
             link.href = image;
             link.download = "PaintJS[🎨]";
@@ -166,10 +171,6 @@
 
     </script>
     <script>
-        $(document).ready(function () {
-            // commentListing()
-        })
-
 
        // 오늘 날짜를 기본으로 표시, 7일전 일기까지 작성 가능
        let today = new Date()
@@ -180,19 +181,23 @@
        let date = today.getDate(); // 일
        // console.log(year + '-' + month + '-' + date);
 
-
        // 일기 저장 클릭
        const submitBtn = document.querySelector('.submit-button');
 
-       // input 빈값 체크
-       let inputCheck = document.getElementsByClassName("check");
+       const cancel = document.querySelector('#cancel');
 
+
+        cancel.addEventListener('click', () => {
+            alert("작성을 취소하셨습니다");
+           window.location.href = '/'
+        })
+
+
+
+       // input 빈값 체크
+       {#let inputCheck = document.getElementsByClassName("check");#}
 
        submitBtn.addEventListener('click', () => {
-
-           // let checkText = '';
-           // let $imput = document.getElementsByTagName(input)
-
 
             // 그림판 저장
             const canvas = document.querySelector('#jsCanvas');
@@ -201,10 +206,8 @@
            // 제목
            let title_give = document.querySelector('#title').value;
 
-
            // 선택한 날짜
            let day_give = document.querySelector('#day').value;
-
 
            // 일기 내용
            let texts_give = document.querySelector('#texts').value;
@@ -215,19 +218,11 @@
            // console.log(weather)
            // selectedIndex : 선택한 요소의 인덱스를 반영
            //테스트
+           console.log(imgDataUrl,title_give,day_give,texts_give,weather);
 
-           function chickForm() {
-               if (imgDataUrl.trim() == "" || day_give.trim() == "" || texts_give.trim() == "" || title_give.trim() == "" ) {
-                alert("작성을 완료!");
-               return false;
-               }
-           }
-           // console.log(imgDataUrl,title_give,day_give,texts_give,weather);
-
-           //데이터를 가져오는 기능과 서버로 요청하고 성공했다면 success 정보를 보여준다
-
-                // let comment = $("#textarea-post").val()
-                // let today = new Date().toISOString()
+            if (imgDataUrl.trim() == "" || day_give.trim() == "" || texts_give.trim() == "" || title_give.trim() == "" ) {
+                alert("작성을 완료해주세요!");
+           }else{
                 $.ajax({
                     type: "POST",
                     url: "/post",
@@ -241,9 +236,13 @@
                     },
                     success: function (response) {
                          alert(response["msg"])
-                        window.location.reload()
+                        window.location.href = '/'
                     }
                 })
+            }
+
+
+
 
        })
 
