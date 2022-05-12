@@ -25,13 +25,29 @@ def loginCheck():
 ##메인페이지
 @app.route('/')
 def main():
-    all_list = list(db.diary.find({},{'_id':False}))
+    all_list = list(db.diary.find({}, {'_id': False}))
     return render_template("mainpage.html", all_list=all_list, loginCheck=loginCheck())
 
 ##일기 작성 페이지
 @app.route('/post')
 def diary_post():
     return render_template('post.html')
+
+
+@app.route('/login')
+def login():
+    msg = request.args.get("msg")
+    return render_template('login.html', msg=msg)
+
+
+@app.route('/sign_up')
+def sign_up():
+    return render_template('sign_up.html')
+
+
+@app.route('/sign_up/check_dup')
+def check_dup():
+    return render_template('sign_up.html')
 
 
 
@@ -53,13 +69,17 @@ def diary_view(page_num):
 ## 일기 작성 API
 @app.route('/post', methods=['POST'])
 def post():
-    # token_receive = request.cookies.get('mytoken')
+
+    token_receive = request.cookies.get('mytoken')
     try:
         # 토큰을 넘겨주지않아도 항상 쿠키로 토큰을 가져올 수 있다
         # payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id ": payload['id']})
+        print(user_info)
+        user_info = db.users.find_one({"username": payload["id"]})
 
         # 포스팅하기
-        #user_info = db.users.find_one({"username": payload["id"]}) #유저 아이디정보
         image_receive = request.form["image"]
         nickname_receive = request.form["nickname"]
         title_receive = request.form["title"]
@@ -81,14 +101,12 @@ def post():
             'recommendCount': "0",
             'reportCount': "0"
         }
-        # 위 데이터를 DB에 저장
+
         db.diary.insert_one(doc)
-
-
-        return jsonify({"result": "success",'msg': '포스팅 성공'})
+        myname = "작성 완료!"
+        return render_template("post.html", msg=myname)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
 
 ## 코멘트 작성 API
 @app.route('/diary/comment', methods=['POST'])
@@ -169,14 +187,12 @@ def api_sign_up():
     return jsonify({'result': 'success'})
 
 
-
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
-
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
@@ -191,11 +207,10 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*60*24),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24),
 
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
 
         # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
@@ -219,7 +234,6 @@ def api_valid():
         # token을 시크릿키로 디코딩합니다.
         # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
 
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
