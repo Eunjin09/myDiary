@@ -26,7 +26,7 @@ def loginCheck():
 @app.route('/')
 def main():
     all_list = list(db.diary.find({},{'_id':False}))
-    return render_template("mainpage.html", all_list=all_list, loginCheck=loginCheck )
+    return render_template("mainpage.html", all_list=all_list, loginCheck=loginCheck())
 
 ##일기 작성 페이지
 @app.route('/post')

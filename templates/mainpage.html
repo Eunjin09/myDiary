@@ -291,7 +291,7 @@
         function logout(){
             $.removeCookie('mytoken');
             alert('로그아웃!')
-            window.location.href='/login'
+            window.location.href='/'
         }
 
 
@@ -306,7 +306,7 @@
     <div class = 'mytitle'>
         <h1 class ='title'>나의 그림 일기장</h1>
         {% if loginCheck == true %}
-        <div class = 'writebtn'><button onclick="location.href='/write'" class = "button is-link">작성하기</button></div>
+        <div class = 'writebtn'><button onclick="location.href='/post'" class = "button is-link">작성하기</button></div>
         {% else %}
         <div class = 'writebtn'><button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button></div>
         {% endif %}
