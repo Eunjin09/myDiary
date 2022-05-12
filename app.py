@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 app = Flask(__name__)
 
 import datetime
+from datetime import datetime
 import jwt
 import hashlib
 
@@ -118,7 +119,7 @@ def save_comment():
     # 새로운 코멘트에 부여할 코멘트번호(comment_num)를 만든다
     comment_count = list(db.comment.find({}, {'_id': False}))
     comment_num = len(comment_count) + 1
-    writtenTime = datetime.now()
+    writtenTime = datetime.today()
 
     # 코멘트에 저장되는 정보 : 일기번호, 코멘트번호, 코멘트내용, 작성자닉네임, 작성날짜
     newComment = {
