@@ -175,45 +175,8 @@
                 }
             })
         }
-        function check_dup() {
-            $.ajax({
-                type: "POST",
-                url: "/sign_up/check_dup",
-                data: {
 
-                    id_give: $('#userid').val()
-                },
-                success: function (response) {
 
-                    if (response["exists"]) {
-                        alert('중복된 ID입니다.')
-
-                    } else {
-                        alert('사용 가능한 ID입니다.')
-                    }
-
-                }
-            });
-        }
-        function sign_up() {
-            $.ajax({
-                type: "POST",
-                url: "/api/sign_up",
-                data: {
-                    id_give: $('#userid').val(),
-                    pw_give: $('#userpw').val(),
-                    nickname_give: $('#usernickname').val()
-                },
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        alert('회원가입이 완료되었습니다.')
-                        window.location.href = '/login'
-                    } else {
-                        alert(response['msg'])
-                    }
-                }
-            })
-        }
 
         // 로그인 팝업창
 
@@ -241,28 +204,7 @@
         });
 
 
-        {#function show_image() {#}
-        {#    $.ajax({#}
-        {#        type: 'GET',#}
-        {#        url: '/diary',#}
-        {#        data: {},#}
-        {#        success: function (response) {#}
-        {#            let rows = response['img']#}
-        {#            for (let i = 0; i < rows.length; i++) {#}
-        {#                let image = rows[i]['image']#}
-        {##}
-        {#                let temp_html=` <div class="col">#}
-        {#                                    <img id="image_inside" src=${image}#}
-        {#                                         class="card-img-top" alt="...">#}
-        {#                                </div>`#}
-        {##}
-        {#                $('#cards-box').append(temp_html)#}
-        {##}
-        {##}
-        {#            }#}
-        {#        }#}
-        {#    });#}
-        {#}#}
+
 
         // 로그아웃 클릭시 토큰값 잃게
         function logout(){
@@ -302,7 +244,7 @@
     {% if loginCheck == true %}
         <button type="button" hidden class="button is-primary">회원가입</button>
     {% else %}
-        <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
+        <button onclick="location.href='sign_up'" class="button is-primary">회원가입</button>
     {% endif %}
 
 
@@ -314,7 +256,7 @@
 <div class="modal-wrap">
     <div class="section has-text-centered">
 
-        <div class="container" style="width:300px">
+        <div class="container">
 
             <div class="field is-horizontal">
                 <div class="field-label is-normal">

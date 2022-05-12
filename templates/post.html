@@ -222,14 +222,7 @@
 
             if (imgDataUrl.trim() == "" || day_give.trim() == "" || texts_give.trim() == "" || title_give.trim() == "" ) {
                 alert("작성을 완료해주세요!");
-               return false;
-           }
-
-
-           //데이터를 가져오는 기능과 서버로 요청하고 성공했다면 success 정보를 보여준다
-
-                // let comment = $("#textarea-post").val()
-                // let today = new Date().toISOString()
+           }else{
                 $.ajax({
                     type: "POST",
                     url: "/post",
@@ -246,6 +239,10 @@
                         window.location.href = '/'
                     }
                 })
+            }
+
+
+
 
        })
 

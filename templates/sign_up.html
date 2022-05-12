@@ -26,12 +26,12 @@
                 data: {
                     id_give: $('#userid').val(),
                     pw_give: $('#userpw').val(),
-                    nickname_give: $('#usernickname').val()
+                    name_give: $('#username').val()
                 },
                 success: function (response) {
                     if (response['result'] == 'success') {
                         alert('회원가입이 완료되었습니다.')
-                        window.location.href = '/login'
+                        window.location.href = '/'
                     } else {
                         alert(response['msg'])
                     }
@@ -60,15 +60,7 @@
                 }
             });
         }
-        //팝업창 닫는 함수입니다.
 
-        function popClose() {
-            var modalPop = $('.modal-wrap');
-            var modalBg = $('.modal-bg');
-
-            $(modalPop).hide();
-            $(modalBg).hide();
-        }
 
     </script>
 </head>
@@ -105,18 +97,18 @@
         </div>
         <div class="field is-horizontal">
             <div class="field-label is-normal">
-                <label class="label" for="usernickname">NICKNAME</label>
+                <label class="label" for="username">NICKNAME</label>
             </div>
             <div class="field-body">
                 <div class="field">
                     <div class="control">
-                        <input type="text" class="input" id="usernickname" placeholder="My Nickname">
+                        <input type="text" class="input" id="username" placeholder="My Nickname">
                     </div>
                 </div>
             </div>
         </div>
         <button class="button is-primary" onclick="sign_up()">회원가입</button>
-        <button class="button is-primary" onclick="popClose()">닫기</button>
+        <button class="button is-primary" onclick="window.location.href='/'">닫기</button>
     </div>
 </div>
 </body>
