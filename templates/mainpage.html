@@ -36,15 +36,26 @@
 
         .mytitle{
 
-
+            background-color: white;
             width: 100%;
             height: 350px;
 
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWluaW9uc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60');
-            background-size: 100% 100%;
-
             position: relative;
 
+        }
+
+        .banner{
+
+            background-image: url("/static/banner.jpg");
+            background-size: 100% 100%;
+
+            width: 60%;
+            height: 280px;
+
+            position: absolute;
+
+            bottom: 0px;
+            left: 21%;
 
         }
 
@@ -55,17 +66,10 @@
 
             font-family: 'Hi Melody', cursive;
             font-size: 50px;
-            color: whitesmoke;
+            color: black;
 
         }
 
-        {#.writebtn{#}
-        {#    position: absolute;#}
-        {#    top: 20px;#}
-        {#    right: 40px;#}
-        {##}
-        {#    margin-top: 15px;#}
-        {#}#}
 
 
         .login{
@@ -76,63 +80,40 @@
         }
 
 
-        .back{
-            background-color: green;
-            background-image: url("https://media.istockphoto.com/photos/colorful-art-pastel-background-texture-picture-id700561108?k=20&m=700561108&s=612x612&w=0&h=LqG4cjUIvmfb2uEWq5FY7i4uih8DHIPD0iBKfXXEq-w=");
-            background-size: 70% 70%;
-            width: 100%;
-            min-height: 100vh;
-
-            position: relative;
-
-
-        }
-        .back {
-            animation: abi 5s infinite;
-        }
-
-        @keyframes abi {
-            50% {background-position: bottom;}
-        }
-
 
         .wrap{
-            background-color: transparent;
-            background-image:linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("https://media.istockphoto.com/photos/blank-greenboard-empty-space-with-chalk-traces-picture-id513822190?k=20&m=513822190&s=612x612&w=0&h=fM8jlpSgS5cZW-zUSXb5wP7-PdOIjycuormp1et1Emw=");
+            background-color: gray;
             background-size: 100% 100%;
 
-            max-width: 80%;
+            max-width: 1800px;
             min-height: 100vh;
-
-
 
 
             border-style: none solid;
             border-color: tan;
             border-radius: 4px;
 
-            margin: auto;
-            padding-top: 40px;
-
-
+            position: static;
 
         }
 
 
 
-        .row-cols-1{
+        .image_box{
 
-            margin-left: 40px;
-            margin-right: 40px;
+            width: 435px;
+            height: 300px;
+
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+
+
+            position: static;
 
             border: 3px black ;
         }
 
-
-
-        .card-img-top{
-            border-radius: 30px 10px 50px;
-        }
 
         .morebtn{
 
@@ -298,95 +279,96 @@
 </head>
 <body>
 
-    <!--배너 및 작성하기버튼-->
-    <div class = 'mytitle'>
-        <h1 type=button onclick="window.location.reload();" class ='title'>나의 그림 일기장</h1>
-    </div>
+<!--배너 및 작성하기버튼-->
+<div class = 'mytitle'>
+    <h1 type=button onclick="window.location.reload();" class ='title'>나의 그림 일기장</h1>
+    <span class = 'banner' ></span>
+</div>
 
 
-    <!--작성하기, 로그인, 로그아웃 버튼-->
-    <div class = 'login'>
-        {% if loginCheck == true %}
-            <button onclick="location.href='/post'" class = "button is-link">작성하기</button>
-        {% else %}
-            <button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button>
-        {% endif %}
+<!--작성하기, 로그인, 로그아웃 버튼-->
+<div class = 'login'>
+    {% if loginCheck == true %}
+        <button onclick="location.href='/post'" class = "button is-link">작성하기</button>
+    {% else %}
+        <button onclick="alert('로그인 필요!')" class = "button is-link">작성하기</button>
+    {% endif %}
 
-        {% if loginCheck == true %}
-            <button onclick= 'logout();' class="button is-primary">로그아웃</button>
-        {% else %}
-            <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
-        {% endif %}
+    {% if loginCheck == true %}
+        <button onclick= 'logout();' class="button is-primary">로그아웃</button>
+    {% else %}
+        <button onclick="javascript:popOpen();" class="button is-primary">로그인</button>
+    {% endif %}
 
-        {% if loginCheck == true %}
-            <button type="button" hidden class="button is-primary">회원가입</button>
-        {% else %}
-            <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
-        {% endif %}
-
-
-    </div>
+    {% if loginCheck == true %}
+        <button type="button" hidden class="button is-primary">회원가입</button>
+    {% else %}
+        <button onclick="javascript:popOpen();" class="button is-primary">회원가입</button>
+    {% endif %}
 
 
-    <!-- //modal 영역 -->
-    <div class="modal-bg" onClick="javascript:popClose();"></div>
-    <div class="modal-wrap">
-        <div class="section has-text-centered">
+</div>
 
-            <div class="container" style="width:300px">
 
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userid">ID</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
-                                       placeholder="My ID">
-                            </div>
+<!-- //modal 영역 -->
+<div class="modal-bg" onClick="javascript:popClose();"></div>
+<div class="modal-wrap">
+    <div class="section has-text-centered">
+
+        <div class="container" style="width:300px">
+
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label" for="userid">ID</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                                   placeholder="My ID">
                         </div>
                     </div>
                 </div>
-                <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                        <label class="label" for="userpw">PW</label>
-                    </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input type="password" class="input" id="userpw" placeholder="My Password">
-                            </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label" for="userpw">PW</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input type="password" class="input" id="userpw" placeholder="My Password">
                         </div>
                     </div>
                 </div>
-                <button class="button is-primary" onclick="login()">로그인</button>
-                <button class="button is-primary" onclick="popClose()">닫기</button>
             </div>
+            <button class="button is-primary" onclick="login()">로그인</button>
+            <button class="button is-primary" onclick="popClose()">닫기</button>
         </div>
     </div>
+</div>
 
 
-    <!--메인페이지 이미지카드 붙는곳-->
-    <div class="back">
-        <div class="wrap">
-            <div id="cards-box" class="row row-cols-1 row-cols-md-3 g-3" >
+<!--메인페이지 이미지카드 붙는곳-->
+<div class="back">
+    <div class="wrap">
+        <div id="cards-box" class="row row-cols-1 row-cols-md-3 g-3" >
 
-                {% for list in all_list %}
-                    <a href=/diary/{{list.diary_num}}><div class="col"> <img src= {{list.image}} class="card-img-top" alt="..."> </div></a>
-                {% endfor %}
-            </div>
-
-            <!--         더보기 및 페이지 상단으로 돌아가기 버튼, 더보기 버튼 구현 불가로 삭제!  -->
-
-
+            {% for list in all_list %}
+                <a class="image_box" href=/diary/{{list.diary_num}}><div class="col"> <img src= {{list.image}} class="card-img-top" alt="..."> </div></a>
+            {% endfor %}
         </div>
-        <div class = morebtn>
-            <div class = 'btn1'>
-                <div><button onclick="window.scrollTo(0,0);" type="button" class="btn btn-secondary btn-lg">최상단</button></div>
-            </div>
+
+        <!--         더보기 및 페이지 상단으로 돌아가기 버튼, 더보기 버튼 구현 불가로 삭제!  -->
+
+
+    </div>
+    <div class = morebtn>
+        <div class = 'btn1'>
+            <div><button onclick="window.scrollTo(0,0);" type="button" class="btn btn-secondary btn-lg">최상단</button></div>
         </div>
     </div>
+</div>
 
 </body>
 </html>
