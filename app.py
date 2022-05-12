@@ -4,14 +4,14 @@ app = Flask(__name__)
 import datetime
 import jwt
 import hashlib
-
+import certifi
 
 SECRET_KEY = 'CLAW'
 
 #### MongoClient 각자 자기 코드 넣어서 테스트 하기!! ####
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta@cluster1.f5u8i.mongodb.net/Cluster1?retryWrites=true&w=majority')
-db = client.na991223
+client = MongoClient('mongodb+srv://sparta:test@cluster0.gqkk6.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
+db = client.dbdiary
 
 
 def loginCheck():
@@ -103,8 +103,9 @@ def post():
         }
 
         db.diary.insert_one(doc)
-        myname = "작성 완료!"
-        return render_template("post.html", msg=myname)
+
+        # return render_template("post.html", msg=myname)({'msg': '코멘트 등록 완료!'})
+        return jsonify({'result': 'success', 'msg': '일기 저장 완료!'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
